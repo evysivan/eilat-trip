@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הטיול שלנו באילת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-1:#CFE9F7;
+    --sky-2:#EAF6FC;
+    --blue:#4FB0E3;
+    --blue-dk:#2B87C0;
+    --navy:#1B3B5A;
+    --slate:#6C8AA3;
+    --sand:#F8EBDA;
+    --sand-dk:#EBD8BE;
+    --white:#FFFFFF;
+    --shadow:0 10px 30px rgba(43,135,192,.10);
+    --shadow-sm:0 4px 14px rgba(43,135,192,.09);
+    --r-lg:28px;
+    --r:20px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important;animation:none!important}}
+  body{
+    margin:0;color:var(--navy);background:var(--sky-2);
+    font-family:'Heebo',-apple-system,'Segoe UI',sans-serif;
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.rub{font-family:'Secular One',sans-serif;font-weight:400;letter-spacing:-.015em}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+  /* ---- floating nav ---- */
+  nav{position:sticky;top:12px;z-index:20;padding:12px 18px 0}
+  .navpill{
+    max-width:520px;margin:0 auto;background:rgba(255,255,255,.82);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-radius:100px;box-shadow:var(--shadow-sm);
+    display:flex;justify-content:center;gap:2px;padding:6px;
+  }
+  .navpill a{
+    flex:1;text-align:center;text-decoration:none;color:var(--slate);
+    font-family:'Heebo',sans-serif;font-weight:600;font-size:14.5px;
+    padding:8px 4px;border-radius:100px;transition:background .18s,color .18s;
+  }
+  .navpill a:hover,.navpill a:focus-visible{background:var(--sky-1);color:var(--navy);outline:none}
+
+  /* ---- hero ---- */
+  .hero{
+    position:relative;text-align:center;
+    background:linear-gradient(180deg,#CFE9F7 0%,#E6F4FB 45%,#F8EBDA 100%);
+    padding-top:46px;overflow:hidden;
+  }
+  .sun{position:absolute;top:26px;left:-40px;width:170px;height:170px;border-radius:50%;
+    background:radial-gradient(circle,#FFF3D6 0%,#FFE7B0 45%,rgba(255,231,176,0) 70%);}
+  .cloud{position:absolute;border-radius:100px;background:rgba(255,255,255,.7)}
+  .c1{width:120px;height:34px;top:66px;right:-20px}
+  .c2{width:80px;height:24px;top:114px;right:70px;background:rgba(255,255,255,.5)}
+  .hero .inner{position:relative;z-index:2}
+  .kicker{
+    display:inline-block;background:rgba(255,255,255,.75);color:var(--blue-dk);
+    font-family:'Heebo',sans-serif;font-weight:600;font-size:14px;letter-spacing:.01em;
+    padding:6px 16px;border-radius:100px;margin-bottom:14px;box-shadow:var(--shadow-sm);
+  }
+  h1{
+    font-weight:400;font-size:clamp(38px,11vw,62px);line-height:1.06;
+    margin:0 0 8px;color:var(--navy);
+  }
+  .fams{
+    font-family:'Secular One',sans-serif;font-size:clamp(18px,5vw,25px);
+    color:var(--blue-dk);margin:0 0 14px;letter-spacing:-.01em;
+  }
+  h1 .wave{color:var(--blue-dk)}
+  .hero p{color:#4E7391;font-size:17px;max-width:30ch;margin:0 auto 20px;line-height:1.55}
+  .pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding-bottom:26px}
+  .pills span{
+    background:var(--white);color:var(--navy);font-family:'Heebo',sans-serif;font-weight:500;
+    font-size:14px;padding:8px 18px;border-radius:100px;box-shadow:var(--shadow-sm);
+  }
+  .curve{display:block;width:100%;height:52px;margin-bottom:-1px}
+
+  /* ---- sections ---- */
+  section{padding:40px 0 4px}
+  h2{font-weight:400;font-size:clamp(26px,7vw,34px);margin:0 0 6px}
+  .lede{color:var(--slate);margin:0 0 22px;font-size:16px;max-width:46ch}
+  .card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:22px;margin-bottom:16px}
+
+  /* ---- day tabs ---- */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:1 0 auto;min-width:84px;border:0;cursor:pointer;background:var(--white);
+    color:var(--slate);font-family:'Heebo',sans-serif;font-weight:600;font-size:15px;
+    padding:11px 16px;border-radius:100px;box-shadow:var(--shadow-sm);transition:.18s;
+  }
+  .tab[aria-selected="true"]{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(79,176,227,.38)}
+  .tab:focus-visible{outline:3px solid var(--blue-dk);outline-offset:2px}
+  .panel[hidden]{display:none}
+  .panel h3{font-size:23px;font-weight:400;margin:0 0 2px}
+  .panel .day-sub{color:var(--slate);font-size:15px;margin:0 0 18px}
+
+  .row{display:grid;grid-template-columns:66px 1fr;gap:14px;padding:14px 0;border-top:1px solid #EAF1F6}
+  .row:first-of-type{border-top:0;padding-top:4px}
+  .time{
+    font-family:'Heebo',sans-serif;font-size:13.5px;font-weight:600;color:var(--blue-dk);
+    background:#EAF6FC;border-radius:100px;padding:4px 0;text-align:center;height:fit-content;
+  }
+  .act{margin:0;font-weight:700;font-size:17.5px;line-height:1.35}
+  .sub{margin:5px 0 0;color:var(--slate);font-size:15px;line-height:1.5}
+  .flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .picks{margin-top:11px;display:grid;gap:8px}
+  .pick{display:block;text-decoration:none;color:var(--navy);background:#F4F9FC;border-radius:16px;padding:11px 13px;transition:background .16s}
+  .pick:hover,.pick:focus-visible{background:#E4F1F9;outline:none}
+  .pk-head{display:flex;align-items:center;gap:8px}
+  .pk-name{flex:1;font-weight:700;font-size:16.5px}
+  .pk-score{flex:none;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:2px 9px;border-radius:100px}
+  .pk-line{display:block;color:var(--slate);font-size:13.5px;line-height:1.45;margin-top:3px}
+  .pk-line em{font-style:normal;color:#B3564F}
+  .pcard{display:block;background:#F4F9FC;border-radius:16px;padding:11px 13px}
+  .after{margin:11px 0 0;color:var(--slate);font-size:13.5px;line-height:1.5}
+  .flag{font-size:12.5px;font-family:'Heebo',sans-serif;font-weight:600;padding:4px 11px;border-radius:100px;background:#EAF6FC;color:var(--blue-dk)}
+  .flag.warn{background:#FDF0E3;color:#B5702F}
+
+  /* ---- option cards ---- */
+  .opt{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:12px}
+  .opt-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .opt h3{font-size:20px;font-weight:400;margin:0;flex:1}
+  .score{
+    flex:none;background:var(--blue);color:#fff;font-family:'Heebo',sans-serif;font-weight:700;
+    font-size:13.5px;padding:3px 11px;border-radius:100px;
+  }
+  .opt p{margin:0 0 12px;color:var(--slate);font-size:15px;line-height:1.5}
+  .meta{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:13px}
+  .meta span{background:#F4F9FC;color:var(--slate);padding:4px 11px;border-radius:100px}
+  .meta .closed{background:#FDECEC;color:#B3564F}
+  .meta a{
+    background:var(--blue);color:#fff;text-decoration:none;font-family:'Heebo',sans-serif;
+    font-weight:600;padding:6px 16px;border-radius:100px;margin-inline-start:auto;
+  }
+  .meta a:hover,.meta a:focus-visible{background:var(--blue-dk)}
+
+
+  .tips{
+    background:linear-gradient(160deg,#4FB0E3,#2B87C0);color:#fff;
+    border-radius:var(--r-lg);padding:26px 24px;margin:8px 0 44px;box-shadow:0 14px 34px rgba(43,135,192,.28);
+  }
+  .tips h2{color:#fff;margin-bottom:16px}
+  .tips ul{margin:0;padding:0;list-style:none}
+  .tips li{
+    background:rgba(255,255,255,.14);border-radius:16px;padding:12px 15px;
+    margin-bottom:9px;font-size:15.5px;line-height:1.5;
+  }
+  .tips b{font-family:'Heebo',sans-serif;font-weight:700}
+  .ask{color:var(--slate);font-size:14.5px;background:#F4F9FC;border-radius:16px;padding:13px 16px;margin:2px 0 0}
+  footer{text-align:center;color:var(--slate);font-size:14px;padding:0 0 44px}
+</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="sun"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="inner wrap">
+    <span class="kicker">חמישי — ראשון</span>
+    <h1>ארבעה ימים<br><span class="wave">באילת</span></h1>
+    <p class="fams">של משפחת ביטון, סיון ואיטח</p>
+    <p>שני חופים, מצפה תת ימי, וארוחת חג בבית.</p>
+    <div class="pills">
+      <span>9 מבוגרים</span>
+      <span>3 ילדים</span>
+    </div>
+  </div>
+  <svg class="curve" viewBox="0 0 1200 52" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,52 L0,26 C180,52 340,2 560,14 C760,25 900,52 1060,34 C1120,27 1170,22 1200,26 L1200,52 Z" fill="#EAF6FC"/>
+  </svg>
+</header>
+
+<main>
+
+<section class="wrap" id="maslul">
+  <h2>המסלול</h2>
+  <p class="lede">בחרו יום.</p>
+
+  <div class="tabs" role="tablist" aria-label="ימי הטיול">
+    <button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true">חמישי</button>
+    <button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false">שישי</button>
+    <button class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false">שבת</button>
+    <button class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false">ראשון</button>
+  </div>
+
+  <div class="card">
+    <div class="panel" id="p1" role="tabpanel" aria-labelledby="t1">
+      <h3>הגעה</h3>
+      <p class="day-sub">היום היחיד שאפשר לעשות בו שופינג.</p>
+      <div class="row">
+        <div class="time">בוקר</div>
+        <div><p class="act">מגיעים</p></div>
+      </div>
+      <div class="row">
+        <div class="time">13:00</div>
+        <div>
+          <p class="act">ארוחת צהריים בעומר׳ס</p>
+          <div class="picks">
+            <a class="pick" href="https://maps.google.com/?cid=7627013372514451195" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">עומר׳ס</span><span class="pk-score">4.8</span></span>
+              <span class="pk-line">שדרות התמרים 26 · 11:00–21:00 · 08-652-1646</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">14:00</div>
+        <div>
+          <p class="act">שנ״צ בבית</p>
+          <p class="sub">הילדים ישנים בסביבות 14:00–15:00. שעה–שעתיים בבית.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">אחרי</div>
+        <div>
+          <p class="act">שופינג</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">בהמשך</div>
+        <div><p class="act">זורמים</p></div>
+      </div>
+      <div class="row">
+        <div class="time">מוקדם</div>
+        <div>
+          <p class="act">מסעדה</p>
+          <p class="sub">שולחן ל־12 בהזמנה מראש, ולשעה מוקדמת — אורי החמוד הולך לישון מוקדם.</p>
+          <div class="picks">
+            <a class="pick" href="https://maps.google.com/?cid=12420276880766813630" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">פסטורי</span><span class="pk-score">4.6</span></span>
+              <span class="pk-line">איטלקית · 18:00–22:00 · 08-634-5111</span>
+            </a>
+            <a class="pick" href="https://maps.google.com/?cid=5286155210605641645" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">לה קוצ׳ינה</span><span class="pk-score">4.4</span></span>
+              <span class="pk-line">איטלקית, טיילת רויאל ביץ׳ · 18:30–22:30 · 08-636-8932</span>
+            </a>
+            <a class="pick" href="https://maps.google.com/?cid=14224243818573375368" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">תאיסטורי</span><span class="pk-score">4.3</span></span>
+              <span class="pk-line">תאילנדי וסושי · 18:00–22:30 · 08-858-1818</span>
+            </a>
+            <a class="pick" href="https://maps.google.com/?cid=16481551766470436902" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">פאפי גריל</span><span class="pk-score">4.3</span></span>
+              <span class="pk-line">בשרים · 13:00–22:00 · 08-633-1549</span>
+            </a>
+          </div>
+          <p class="after">רק פאפי פתוחה מוקדם — מ־13:00. פסטורי נפתחת ב־18:00 ולה קוצ׳ינה רק ב־18:30.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+      <h3>חוף בבוקר, חג בערב</h3>
+      <p class="day-sub">היום היחיד עם ארוחה גדולה בבית.</p>
+      <div class="row">
+        <div class="time">8:00</div>
+        <div>
+          <p class="act">ארוחת בוקר וקפה בבראנז׳ה</p>
+          <div class="picks">
+            <a class="pick" href="https://www.google.com/maps/place/?q=place_id:ChIJfR8XuPdxABURqGX6MYOojiw" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">בראנז׳ה</span><span class="pk-score">4.6</span></span>
+              <span class="pk-line">דרך יותם 3 · פותחת בדיוק ב־8:00 · 08-864-9900</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">אחרי</div>
+        <div>
+          <p class="act">ישר לים</p>
+          <p class="sub">החוף של מוש או ריף הדולפינים — להחליט בבוקר עצמו.</p>
+          <div class="picks">
+            <a class="pick" href="https://maps.google.com/?cid=213984166853317869" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">החוף של מוש</span><span class="pk-score">4.3</span></span>
+              <span class="pk-line">מזרנים, כריות ומסעדה על החוף · 8:30–20:00 · כניסה חופשית</span>
+            </a>
+            <a class="pick" href="https://maps.google.com/?cid=12707130350262111665" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">ריף הדולפינים</span><span class="pk-score">4.3</span></span>
+              <span class="pk-line">מפרץ רגוע, הרבה צל ומזח צפייה · האכלת דולפינים כל שעתיים · כניסה בתשלום, עד גיל 3 חינם · <em>המסעדה באתר לא כשרה</em></span>
+            </a>
+          </div>
+          <div class="flags"><span class="flag">נעלי ים</span></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">צהריים</div>
+        <div><p class="act">שניצלים בבית</p></div>
+      </div>
+      <div class="row">
+        <div class="time">14:00</div>
+        <div>
+          <p class="act">שנ״צ בבית</p>
+          <p class="sub">שעה–שעתיים.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="time">ערב</div>
+        <div>
+          <p class="act">ארוחת חג בבית עם קייטרינג</p>
+          <p class="sub">להזמין כמה ימים מראש ולסגור שעת משלוח מוקדמת.</p>
+          <div class="picks">
+            <div class="pcard">
+              <span class="pk-head"><span class="pk-name">ברכת המזון</span><span class="pk-score">9.1</span></span>
+              <span class="pk-line">בשרי, כשר למהדרין · עין החתול 3 · 225 ביקורות</span>
+            </div>
+            <div class="pcard">
+              <span class="pk-head"><span class="pk-name">שירן שירותי מזון</span><span class="pk-score">9.0</span></span>
+              <span class="pk-line">המסגר 4 · 262 ביקורות · חניון קרוב, כניסה נגישה</span>
+            </div>
+            <div class="pcard">
+              <span class="pk-head"><span class="pk-name">בטעם של קובי</span><span class="pk-score">9.0</span></span>
+              <span class="pk-line">כשר למהדרין · החרש 11 · 258 ביקורות</span>
+            </div>
+          </div>
+          <p class="after">לשאול את כולם: כמה מנות למבוגר, מה מגיע חם, האם יש כלים חד־פעמיים, ומה השעה האחרונה למשלוח בשישי.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+      <h3>מצפה תת ימי</h3>
+      <p class="day-sub">בוקר אחד מסודר, ואז יום פנוי.</p>
+      <div class="row">
+        <div class="time">בוקר</div>
+        <div>
+          <p class="act">מצפה תת ימי</p>
+          <p class="sub">להגיע עם הפתיחה. האכלת הכרישים של 15:00 פחות עמוסה מזו של הבוקר.</p>
+          <div class="picks">
+            <a class="pick" href="https://maps.google.com/?cid=2166387543453836812" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">מצפה תת ימי</span><span class="pk-score">4.5</span></span>
+              <span class="pk-line">9:00–16:00, כולל שבת · 08-636-4200</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">14:00</div>
+        <div>
+          <p class="act">שנ״צ בבית</p>
+          <p class="sub">שעה–שעתיים.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">אחרי</div>
+        <div><p class="act">זורמים — ים, בית</p></div>
+      </div>
+      <div class="row">
+        <div class="time">ערב</div>
+        <div>
+          <p class="act">מזמינים פיצה</p>
+          <p class="sub">חלק ממקומות הפיצה באילת סגורים בשבת ונפתחים בצאתה, וזו השעה הכי עמוסה שלהם. שווה לברר מקום ומספר מראש.</p>
+          <div class="flags"><span class="flag warn">לברר מי פתוח</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p4" role="tabpanel" aria-labelledby="t4" hidden>
+      <h3>חוף אחרון ודרך הביתה</h3>
+      <p class="day-sub">בוקר קצר ויוצאים.</p>
+      <div class="row">
+        <div class="time">בוקר</div>
+        <div>
+          <p class="act">חוף הדקל</p>
+          <p class="sub">מוקדם המים הכי צלולים והחוף ריק.</p>
+          <div class="picks">
+            <a class="pick" href="https://maps.google.com/?cid=10119157383046940340" target="_blank" rel="noopener">
+              <span class="pk-head"><span class="pk-name">חוף הדקל</span><span class="pk-score">4.5</span></span>
+              <span class="pk-line">8:00–18:30 · מקלחות, כיסאות ובר אוכל</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="time">צהריים</div>
+        <div>
+          <p class="act">מתחילים את הנסיעה חזרה</p>
+          <p class="sub">השנ״צ נופל על הנסיעה — יוצאים בערך בשעה שהם נרדמים ממילא.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>הטיול שלנו · חמישי עד ראשון</footer>
+</main>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(i){
+    tabs.forEach(function(t,j){
+      t.setAttribute('aria-selected', j===i ? 'true':'false');
+      document.getElementById(t.getAttribute('aria-controls')).hidden = (j!==i);
+    });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(i)});
+    t.addEventListener('keydown',function(e){
+      var n = e.key==='ArrowLeft' ? i+1 : e.key==='ArrowRight' ? i-1 : null;
+      if(n===null) return;
+      e.preventDefault();
+      n=(n+tabs.length)%tabs.length;
+      show(n); tabs[n].focus();
+    });
+  });
+})();
+</script>
+</body>
+</html>
