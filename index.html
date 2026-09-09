@@ -432,7 +432,7 @@
 
 <section class="wrap" id="tozaot" hidden>
   <h2>התוצאות עד עכשיו</h2>
-  <p class="lede">מתעדכן אוטומטית לפי מה שכולם מילאו בטופס.</p>
+  <p class="lede" id="res-lede"></p>
   <div class="res" id="res"><p class="res-state">טוען תוצאות…</p></div>
 </section>
 
@@ -462,13 +462,20 @@
 
 /* ---- live form results ---- */
 (function(){
-  // כתובת ה־CSV של גיליון התשובות (פרסום באינטרנט → csv)
+  // כתובת ה־CSV של גיליון התשובות (פרסום באינטרנט → csv).
+  // כשהיא ריקה מוצג העותק הקבוע שלמטה.
   var CSV_URL = "";
-  if(!CSV_URL) return;
+  var SNAPSHOT_DATE = "9.9";
+  var SNAPSHOT = "\"Timestamp\",\"מסעדה בחמישי בערב\",\"קייטרינג\"\n\"2026/09/09 9:30:47 AM GMT+3\",\"לה קוצינה או פאפי גם סבבה\",\"ברכת המזון\"\n\"2026/09/09 12:20:16 PM GMT+3\",\"פסטורי\",\"\"\n\"2026/09/09 12:39:36 PM GMT+3\",\"פסטורי\",\"רוזמרין\"";
+  if(!CSV_URL && !SNAPSHOT) return;
 
   var sec = document.getElementById('tozaot');
   var box = document.getElementById('res');
+  var lede = document.getElementById('res-lede');
   sec.hidden = false;
+  lede.textContent = CSV_URL
+    ? 'מתעדכן אוטומטית לפי מה שכולם מילאו בטופס.'
+    : 'לפי התשובות שהתקבלו עד ' + SNAPSHOT_DATE + '.';
 
   function parseCSV(text){
     var rows=[], row=[], val='', q=false, i=0, c;
@@ -551,10 +558,11 @@
       });
       if(!order.length) return;
       var max = Math.max.apply(null, order.map(function(a){ return counts[a]; }));
+      var soleMax = order.filter(function(a){ return counts[a] === max; }).length === 1;
       var block = el('div','qblock');
       block.appendChild(el('p','q',h.trim()));
       order.sort(function(a,b){ return counts[b]-counts[a]; }).forEach(function(a){
-        var bar = el('div','bar' + (counts[a]===max ? ' lead' : ''));
+        var bar = el('div','bar' + (soleMax && counts[a]===max ? ' lead' : ''));
         var top = el('div','bar-top');
         top.appendChild(el('span','bar-name',a));
         top.appendChild(el('span','bar-count', counts[a] === 1 ? 'קול אחד' : counts[a] + ' קולות'));
@@ -585,14 +593,20 @@
     box.appendChild(wrap);
   }
 
-  fetch(CSV_URL, {cache:'no-store'})
-    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
-    .then(function(t){
-      var rows = parseCSV(t);
-      if(rows.length < 1) throw 0;
-      render(rows);
-    })
-    .catch(fail);
+  function draw(text){
+    var rows = parseCSV(text);
+    if(rows.length < 1) throw 0;
+    render(rows);
+  }
+
+  if(CSV_URL){
+    fetch(CSV_URL, {cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+      .then(draw)
+      .catch(function(){ if(SNAPSHOT){ try{ draw(SNAPSHOT); return; }catch(e){} } fail(); });
+  } else {
+    try{ draw(SNAPSHOT); } catch(e){ fail(); }
+  }
 })();
 </script>
 </body>
