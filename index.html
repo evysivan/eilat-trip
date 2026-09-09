@@ -175,6 +175,23 @@
     padding:7px 15px;border-radius:100px;transition:background .16s;
   }
   .formlink:hover,.formlink:focus-visible{background:#D8EDF8;outline:none}
+  /* ---- live results ---- */
+  .res{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:22px;margin:0 0 36px}
+  .res .qblock{padding:16px 0;border-top:1px solid #EAF1F6}
+  .res .qblock:first-child{border-top:0;padding-top:2px}
+  .res .q{margin:0 0 12px;font-weight:700;font-size:17px;line-height:1.35}
+  .bar{margin-bottom:11px}
+  .bar-top{display:flex;align-items:baseline;gap:8px;margin-bottom:5px}
+  .bar-name{flex:1;font-size:15.5px;font-weight:500}
+  .bar-count{flex:none;color:var(--slate);font-size:13.5px;font-weight:600}
+  .bar-track{background:#EAF6FC;border-radius:100px;height:9px;overflow:hidden}
+  .bar-fill{background:var(--blue);height:100%;border-radius:100px;width:0;transition:width .45s ease}
+  .bar.lead .bar-name{font-weight:700;color:var(--blue-dk)}
+  .bar.lead .bar-fill{background:linear-gradient(90deg,#2B87C0,#4FB0E3)}
+  .res .quote{background:#F4F9FC;border-radius:14px;color:var(--slate);font-size:14.5px;
+    line-height:1.5;margin:0 0 7px;padding:9px 13px}
+  .res-state{color:var(--slate);font-size:15px;text-align:center;margin:6px 0;padding:8px 0}
+  .res-note{color:var(--slate);font-size:13.5px;margin:16px 0 0;text-align:center}
   .ask{color:var(--slate);font-size:14.5px;background:#F4F9FC;border-radius:16px;padding:13px 16px;margin:2px 0 0}
   footer{text-align:center;color:var(--slate);font-size:14px;padding:0 0 44px}
 </style>
@@ -286,28 +303,19 @@
       <div class="row">
         <div class="time">8:00</div>
         <div>
-          <p class="act">ארוחת בוקר וקפה בבראנז׳ה</p>
-          <div class="picks">
-            <a class="pick" href="https://www.google.com/maps/place/?q=place_id:ChIJfR8XuPdxABURqGX6MYOojiw" target="_blank" rel="noopener">
-              <span class="pk-head"><span class="pk-name">בראנז׳ה</span><span class="pk-score">4.6</span></span>
-              <span class="pk-line">דרך יותם 3 · פותחת בדיוק ב־8:00 · 08-864-9900</span>
-            </a>
-          </div>
+          <p class="act">ענבל לרוזמרין</p>
+          <p class="sub">להעמיס סלטים, פסטלים וכד׳ לארוחת החג.</p>
         </div>
       </div>
       <div class="row">
-        <div class="time">אחרי</div>
+        <div class="time">9:00</div>
         <div>
-          <p class="act">ישר לים</p>
-          <p class="sub">החוף של מוש או ריף הדולפינים — להחליט בבוקר עצמו.</p>
+          <p class="act">פותחים בחוף של מוש</p>
+          <p class="sub">כולל ארוחת בוקר שם.</p>
           <div class="picks">
             <a class="pick" href="https://maps.google.com/?cid=213984166853317869" target="_blank" rel="noopener">
               <span class="pk-head"><span class="pk-name">החוף של מוש</span><span class="pk-score">4.3</span></span>
               <span class="pk-line">מזרנים, כריות ומסעדה על החוף · 8:30–20:00 · כניסה חופשית</span>
-            </a>
-            <a class="pick" href="https://maps.google.com/?cid=12707130350262111665" target="_blank" rel="noopener">
-              <span class="pk-head"><span class="pk-name">ריף הדולפינים</span><span class="pk-score">4.3</span></span>
-              <span class="pk-line">מפרץ רגוע, הרבה צל ומזח צפייה · האכלת דולפינים כל שעתיים · כניסה בתשלום, עד גיל 3 חינם · <em>המסעדה באתר לא כשרה</em></span>
             </a>
           </div>
           <div class="flags"><span class="flag">נעלי ים</span></div>
@@ -422,6 +430,12 @@
   </div>
 </section>
 
+<section class="wrap" id="tozaot" hidden>
+  <h2>התוצאות עד עכשיו</h2>
+  <p class="lede">מתעדכן אוטומטית לפי מה שכולם מילאו בטופס.</p>
+  <div class="res" id="res"><p class="res-state">טוען תוצאות…</p></div>
+</section>
+
 <footer>הטיול שלנו · חמישי עד ראשון</footer>
 </main>
 
@@ -444,6 +458,141 @@
       show(n); tabs[n].focus();
     });
   });
+})();
+
+/* ---- live form results ---- */
+(function(){
+  // כתובת ה־CSV של גיליון התשובות (פרסום באינטרנט → csv)
+  var CSV_URL = "";
+  if(!CSV_URL) return;
+
+  var sec = document.getElementById('tozaot');
+  var box = document.getElementById('res');
+  sec.hidden = false;
+
+  function parseCSV(text){
+    var rows=[], row=[], val='', q=false, i=0, c;
+    text = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+    for(; i<text.length; i++){
+      c = text[i];
+      if(q){
+        if(c === '"'){ if(text[i+1] === '"'){ val+='"'; i++; } else q=false; }
+        else val+=c;
+      } else if(c === '"'){ q=true; }
+      else if(c === ','){ row.push(val); val=''; }
+      else if(c === '\n'){ row.push(val); rows.push(row); row=[]; val=''; }
+      else val+=c;
+    }
+    if(val!=='' || row.length){ row.push(val); rows.push(row); }
+    return rows.filter(function(r){ return r.some(function(x){ return x.trim()!==''; }); });
+  }
+
+  var META = ['חותמת זמן','timestamp','כתובת אימייל','email address','אימייל','email',
+              'שם','שם מלא','השם שלך','מי אתה','name','full name'];
+  function skip(h){
+    var t = h.trim().toLowerCase().replace(/[?:.]+$/,'');
+    return !t || META.indexOf(t) !== -1;
+  }
+
+  // עמודה של טקסט חופשי: כותרת שמרמזת על כך, תשובות ארוכות,
+  // עמודה שרובם דילגו עליה, או תשובות כמעט תמיד שונות
+  var TEXT_HINTS = ['הערות','הערה','משהו','אחר','בקשות','other','comments','notes'];
+  function isText(head, vals, total){
+    var h = head.trim().toLowerCase();
+    if(TEXT_HINTS.some(function(w){ return h.indexOf(w) !== -1; })) return true;
+    if(vals.some(function(v){ return v.length > 35; })) return true;
+    if(total >= 3 && vals.length / total < 0.6) return true;
+    if(vals.length < 3) return false;
+    var uniq = vals.filter(function(v,i){ return vals.indexOf(v) === i; }).length;
+    return uniq / vals.length > 0.7;
+  }
+
+  function el(tag, cls, txt){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(txt !== undefined) e.textContent = txt;
+    return e;
+  }
+
+  function render(rows){
+    var head = rows[0], data = rows.slice(1);
+    box.textContent = '';
+    if(!data.length){
+      box.appendChild(el('p','res-state','עוד אף אחד לא מילא. תהיו הראשונים.'));
+      return;
+    }
+    var shown = 0;
+    head.forEach(function(h, ci){
+      if(skip(h)) return;
+      var raw = [];
+      data.forEach(function(r){
+        var cell = (r[ci]||'').trim();
+        if(cell) raw.push(cell);
+      });
+      if(!raw.length) return;
+      shown++;
+
+      if(isText(h, raw, data.length)){
+        var tb = el('div','qblock');
+        tb.appendChild(el('p','q',h.trim()));
+        raw.slice(0,8).forEach(function(v){ tb.appendChild(el('p','quote','״' + v + '״')); });
+        box.appendChild(tb);
+        return;
+      }
+
+      var counts = {}, order = [];
+      raw.forEach(function(cell){
+        cell.split(', ').forEach(function(a){
+          a = a.trim();
+          if(!a) return;
+          if(!(a in counts)){ counts[a] = 0; order.push(a); }
+          counts[a]++;
+        });
+      });
+      if(!order.length) return;
+      var max = Math.max.apply(null, order.map(function(a){ return counts[a]; }));
+      var block = el('div','qblock');
+      block.appendChild(el('p','q',h.trim()));
+      order.sort(function(a,b){ return counts[b]-counts[a]; }).forEach(function(a){
+        var bar = el('div','bar' + (counts[a]===max ? ' lead' : ''));
+        var top = el('div','bar-top');
+        top.appendChild(el('span','bar-name',a));
+        top.appendChild(el('span','bar-count', counts[a] === 1 ? 'קול אחד' : counts[a] + ' קולות'));
+        bar.appendChild(top);
+        var track = el('div','bar-track');
+        var fill = el('div','bar-fill');
+        track.appendChild(fill);
+        bar.appendChild(track);
+        block.appendChild(bar);
+        requestAnimationFrame(function(){ fill.style.width = Math.round(counts[a]/max*100) + '%'; });
+      });
+      box.appendChild(block);
+    });
+    if(!shown){
+      box.appendChild(el('p','res-state','אין עדיין מה להציג.'));
+      return;
+    }
+    box.appendChild(el('p','res-note', data.length === 1 ? 'תשובה אחת עד עכשיו' : data.length + ' תשובות עד עכשיו'));
+  }
+
+  function fail(){
+    box.textContent = '';
+    box.appendChild(el('p','res-state','לא הצלחנו לטעון את התוצאות כרגע.'));
+    var a = el('a','formlink','לצפייה בטופס');
+    a.href = 'https://forms.gle/n6dBE7epAT8YpWPc9';
+    a.target = '_blank'; a.rel = 'noopener';
+    var wrap = el('p','res-state'); wrap.appendChild(a);
+    box.appendChild(wrap);
+  }
+
+  fetch(CSV_URL, {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(t){
+      var rows = parseCSV(t);
+      if(rows.length < 1) throw 0;
+      render(rows);
+    })
+    .catch(fail);
 })();
 </script>
 </body>
